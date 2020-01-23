@@ -57,9 +57,9 @@ const computerTurn = () => {
 };
 
 gameCanvas.addEventListener('click', (event) => {
-    if (!result && currentPlayer === 0) {
-        let x = Math.floor(event.x/gameBoard.gridSize),
-            y = Math.floor(event.y/gameBoard.gridSize);
+    let x = Math.floor(event.x/gameBoard.gridSize),
+        y = Math.floor(event.y/gameBoard.gridSize);
+    if (!result && currentPlayer === 0 && gameBoard.testEmpty(x, y)) {
         gameBoard.insert(x, y, 'x');
         gameBoard.drawTokens();
         if (gameBoard.checkWin('x')) {

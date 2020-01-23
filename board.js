@@ -133,8 +133,10 @@ class Board {
     };
 
     insert(x, y, token) {
-        if (this.state[y][x] === '' || token === '') {
-            this.state[y][x] = token;
-        }
+        this.state[y][x] = token;
     };
+
+    testEmpty(x, y) {
+        return (this.state[y][x] === '');
+    }
 };
