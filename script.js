@@ -1,12 +1,14 @@
 const canvas = document.querySelector('#gameCanvas');
 const c = canvas.getContext('2d');
 
+const canvases = [];
+
 const turnIndicator = document.querySelector('#turnIndicator');
 const restartButton = document.querySelector('#restartButton');
 const resultText = document.querySelector('#resultText');
 
-canvas.width = window.innerWidth * 0.35;
-canvas.height = window.innerWidth * 0.35;
+canvas.width = window.innerWidth * 0.3;
+canvas.height = window.innerWidth * 0.3;
 
 let boardSize = canvas.width;
 let gridSize = boardSize/3;
@@ -163,7 +165,7 @@ const computerTurn = (player, board) => {
 
 const minimax = (board, depth, maximizing_player) => {
     if (checkWin(0, board)) {
-        return -100 + depth;
+        return (-100) + depth;
     } else if (checkWin(1, board)) {
         return 100 - depth;
     } else if (checkTie(board)) {
@@ -180,25 +182,26 @@ const minimax = (board, depth, maximizing_player) => {
         getEmptySpaces(board).forEach(space => {
             let child = board.slice();
             child[space.y][space.x] = 'o';
-            let score = minimax(child, depth-1, false);
+            let score = minimax(child, depth+1, false);
             child[space.y][space.x] = '';
             best = Math.max(best, score);
             
             if (depth === 0) {
-                let index = computerMoves[score] !== undefined ? `${computerMoves[score]},${space}` : space;
+                let index = computerMoves[score] !== undefined ? Array.isArray(computerMoves[score]) ? [space, ...computerMoves[score]] : [space, computerMoves[score]] : space;
                 computerMoves[score] = index;
             }
         });
 
         if (depth === 0) {
-            if (typeof computerMoves[best] === 'string') {
-                let indices = computerMoves[best].split(',');
+            if (Array.isArray(computerMoves[best])) {
+                let indices = computerMoves[best];
                 index = indices[Math.floor(Math.random() * indices.length)];
             } else {
                 index = computerMoves[best];
             }
 
             return index;
+            
         }
 
         return best;
@@ -208,19 +211,19 @@ const minimax = (board, depth, maximizing_player) => {
         getEmptySpaces(board).forEach(space => {
             let child = board.slice();
             child[space.y][space.x] = 'x';
-            let score = minimax(child, depth-1, true);
+            let score = minimax(child, depth+1, true);
             child[space.y][space.x] = '';
             best = Math.min(best, score);
             
             if (depth === 0) {
-                let index = computerMoves[score] !== undefined ? `${computerMoves[score]},${space}` : space;
+                let index = computerMoves[score] !== undefined ? Array.isArray(computerMoves[score]) ? [space, ...computerMoves[score]] : [space, computerMoves[score]] : space;
                 computerMoves[score] = index;
             }
         });
 
         if (depth === 0) {
-            if (typeof computerMoves[best] === 'string') {
-                let indices = computerMoves[best].split(',');
+            if (Array.isArray(computerMoves[best])) {
+                let indices = computerMoves[best];
                 index = indices[Math.floor(Math.random() * indices.length)];
             } else {
                 index = computerMoves[best];
