@@ -55,3 +55,7 @@ body {
     font-size: 4vh;
     display: none;
 }
+
+canvas:not(#gameCanvas) {
+    margin: 0 1vw;
+}
