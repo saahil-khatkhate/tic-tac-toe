@@ -24,6 +24,7 @@ let wins = [
 ];
 
 let gameBoard = [];
+let computerMoves = {};
 
 const players = ['x', 'o'];
 let currentPlayer;
@@ -99,10 +100,17 @@ const drawBoard = (board) => {
     }
 };
 
-const turn = (event, player, board) => {
-    let x = Math.floor(event.x/gridSize),
-        y = Math.floor(event.y/gridSize);
-    
+const getEmptySpaces = (board) => {
+    let empty = [];
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (board[i][j] === '') empty.push({x: j, y: i});
+        }
+    }
+    return empty;
+}
+
+const turn = (x, y, player, board) => {
     if (board[y][x] === '') {
         board[y][x] = players[player];
         drawBoard(board);
@@ -129,19 +137,107 @@ const checkWin = (player, board) => {
 };
 
 const checkTie = (board) => {
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            if (board[i][j] === '') {
-                return false;
-            }
-        }
-    }
-    return true;
+    return getEmptySpaces(board).length === 0 ? true : false;
 };
 
+const computerTurn = (player, board) => {
+    let move = minimax(board, 0, true);
+    turn(move.x, move.y, player, board);
+    if (checkWin(currentPlayer, board)) {
+        result = currentPlayer === 0 ? 'You Won!!!' : 'Computer Won!!!';
+        resultText.innerText = result;
+        resultText.style.display = 'block';
+        restartButton.style.display = 'block';
+        turnIndicator.style.display = 'none';
+    } else if (checkTie(board)) {
+        result = 'Tie!!!';
+        resultText.innerText = result;
+        resultText.style.display = 'block';
+        restartButton.style.display = 'block';
+        turnIndicator.style.display = 'none';
+    } else {
+        currentPlayer = 0;
+        turnIndicator.innerText = 'Your turn';
+    }
+};
+
+const minimax = (board, depth, maximizing_player) => {
+    if (checkWin(0, board)) {
+        return -100 + depth;
+    } else if (checkWin(1, board)) {
+        return 100 - depth;
+    } else if (checkTie(board)) {
+        return 0;
+    }
+
+    if (depth === 0) {
+        computerMoves = {};
+    }
+
+    if (maximizing_player) {
+        let best = -Infinity;
+
+        getEmptySpaces(board).forEach(space => {
+            let child = board.slice();
+            child[space.y][space.x] = 'o';
+            let score = minimax(child, depth-1, false);
+            child[space.y][space.x] = '';
+            best = Math.max(best, score);
+            
+            if (depth === 0) {
+                let index = computerMoves[score] !== undefined ? `${computerMoves[score]},${space}` : space;
+                computerMoves[score] = index;
+            }
+        });
+
+        if (depth === 0) {
+            if (typeof computerMoves[best] === 'string') {
+                let indices = computerMoves[best].split(',');
+                index = indices[Math.floor(Math.random() * indices.length)];
+            } else {
+                index = computerMoves[best];
+            }
+
+            return index;
+        }
+
+        return best;
+    } else {
+        let best = Infinity;
+
+        getEmptySpaces(board).forEach(space => {
+            let child = board.slice();
+            child[space.y][space.x] = 'x';
+            let score = minimax(child, depth-1, true);
+            child[space.y][space.x] = '';
+            best = Math.min(best, score);
+            
+            if (depth === 0) {
+                let index = computerMoves[score] !== undefined ? `${computerMoves[score]},${space}` : space;
+                computerMoves[score] = index;
+            }
+        });
+
+        if (depth === 0) {
+            if (typeof computerMoves[best] === 'string') {
+                let indices = computerMoves[best].split(',');
+                index = indices[Math.floor(Math.random() * indices.length)];
+            } else {
+                index = computerMoves[best];
+            }
+
+            return index;
+        }
+
+        return best;
+    }
+}
+
 canvas.addEventListener('click', (event) => {
-    if (!result) {
-        turn(event, currentPlayer, gameBoard);
+    if (!result && currentPlayer === 0) {
+        let x = Math.floor(event.x/gridSize),
+            y = Math.floor(event.y/gridSize);
+        turn(x, y, currentPlayer, gameBoard);
         if (checkWin(currentPlayer, gameBoard)) {
             result = currentPlayer === 0 ? 'You Won!!!' : 'Computer Won!!!';
             resultText.innerText = result;
@@ -154,9 +250,11 @@ canvas.addEventListener('click', (event) => {
             resultText.style.display = 'block';
             restartButton.style.display = 'block';
             turnIndicator.style.display = 'none';
+        } else {
+            currentPlayer = 1;
+            turnIndicator.innerText = 'Computer\'s thinking';
+            computerTurn(currentPlayer, gameBoard);
         }
-        currentPlayer = currentPlayer === 0 ? 1 : 0;
-        turnIndicator.innerText = currentPlayer === 0 ? 'Your turn' : 'Computer\'s turn';
     }
 });
 
