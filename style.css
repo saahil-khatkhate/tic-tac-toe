@@ -50,7 +50,8 @@ body {
     background: rgba(0, 0, 0, 0.1);
 }
 
-#winText {
+#resultText {
     margin-top: 3vh;
     font-size: 4vh;
+    display: none;
 }
