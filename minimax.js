@@ -16,7 +16,6 @@ const minimax = (board, depth, maximizing_player) => {
 
         board.getAvailableSpaces().forEach(space => {
             let child = new Board({
-                size: board.gridSize,
                 state: board.state
             });
             child.insert(space.x, space.y, 'o');
@@ -48,7 +47,6 @@ const minimax = (board, depth, maximizing_player) => {
 
         board.getAvailableSpaces().forEach(space => {
             let child = new Board({
-                size: board.gridSize,
                 state: board.state
             });
             child.insert(space.x, space.y, 'x');

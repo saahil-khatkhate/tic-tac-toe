@@ -1,8 +1,10 @@
 class Board {
     constructor(info) {
-        this.size = info.size;
-        this.gridSize = this.size/3;
-        this.tokenThreshold = this.gridSize/4;
+        if (info.size) {
+            this.size = info.size;
+            this.gridSize = this.size/3;
+            this.tokenThreshold = this.gridSize/4;
+        }
         if (info.canvas) {
             this.canvas = info.canvas;
             this.canvas.width = this.size;
