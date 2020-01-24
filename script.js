@@ -38,7 +38,7 @@ const computerTurn = () => {
     let move = minimax(gameBoard, 0, true);
     gameBoard.insert(move.x, move.y, 'o', true);
     gameBoard.drawTokens();
-    if (gameBoard.checkWin('o')) {
+    if (gameBoard.checkWin('o', true)) {
         result = 'Computer Won!!!';
         resultText.innerText = result;
         resultText.style.display = 'block';
@@ -57,12 +57,12 @@ const computerTurn = () => {
 };
 
 gameCanvas.addEventListener('click', (event) => {
-    let x = Math.floor(event.x/gameBoard.gridSize),
-        y = Math.floor(event.y/gameBoard.gridSize);
+    let x = Math.floor((event.x - gameCanvas.offsetLeft) / gameBoard.gridSize),
+        y = Math.floor((event.y - gameCanvas.offsetTop) / gameBoard.gridSize);
     if (!result && currentPlayer === 0 && gameBoard.testEmpty(x, y)) {
         gameBoard.insert(x, y, 'x');
         gameBoard.drawTokens();
-        if (gameBoard.checkWin('x')) {
+        if (gameBoard.checkWin('x', true)) {
             result = 'You Won!!!';
             resultText.innerText = result;
             resultText.style.display = 'block';
