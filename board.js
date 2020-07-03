@@ -37,11 +37,11 @@ class Board {
     };
 
     drawBoard() {
-        this.context.fillStyle = 'white';
+        this.context.fillStyle = componentColor;
         this.context.fillRect(0, 0, this.size, this.size);
 
         this.context.lineWidth = 3;
-        this.context.strokeStyle = 'black';
+        this.context.strokeStyle = contrastColor;
         this.context.moveTo(this.gridSize, 0);
         this.context.lineTo(this.gridSize, this.size);
         this.context.moveTo(this.gridSize*2, 0);
@@ -63,7 +63,7 @@ class Board {
                         r = this.gridSize/2 - this.tokenThreshold;
     
                     this.context.beginPath();
-                    this.context.strokeStyle = 'black';
+                    this.context.strokeStyle = contrastColor;
                     this.context.lineWidth = 3;
                     this.context.arc(x, y, r, Math.PI*2, false);
                     this.context.stroke();
@@ -75,7 +75,7 @@ class Board {
                         y2 = (i+1) * this.gridSize - this.tokenThreshold;
                     
                     this.context.beginPath();
-                    this.context.strokeStyle = 'black'
+                    this.context.strokeStyle = contrastColor;
                     this.context.lineWidth = 3;
                     this.context.moveTo(x1, y1);
                     this.context.lineTo(x2, y2);
@@ -88,7 +88,7 @@ class Board {
                         y = i * this.gridSize + this.tokenThreshold/2,
                         r = this.gridSize - this.tokenThreshold;
                     
-                    this.context.fillStyle = 'white';
+                    this.context.fillStyle = componentColor;
                     this.context.fillRect(x, y, r, r);
                 }
             }
@@ -136,6 +136,7 @@ class Board {
             ['', '', '']
         ];
         this.context.clearRect(0, 0, this.size, this.size);
+        winState.current = false;
         this.setup();
     };
 
@@ -148,6 +149,7 @@ class Board {
     };
 
     drawWinLine(winCombo, token) {
+        winState = { winCombo, token, current: true };
         let boxes = [];
         winCombo.forEach(space => {
             switch (space) {

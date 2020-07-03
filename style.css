@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:400|Lato:300');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+html {
+    --background: #f5f5f5;
+    --contrast: black;
+    --component: white;
+    --hover: rgba(0, 0, 0, 0.1);
+}
 
 * {
     margin: 0;
@@ -10,7 +18,7 @@
 }
 
 body {
-    background: whitesmoke;
+    background: var(--background);
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -29,6 +37,7 @@ body {
     margin-top: 3vh;
     font-size: 2vh;
     display: block;
+    color: var(--contrast);
 }
 
 #restartButton {
@@ -37,20 +46,59 @@ body {
     height: 5vh;
     margin-top: 4vh;
     font-size: 2vh;
-    background: white;
-    border: 1px solid black;
+    background: var(--component);
+    border: 1px solid var(--contrast);
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
     display: none;
+    color: var(--contrast);
 }
 
 #restartButton:hover {
-    background: rgba(0, 0, 0, 0.1);
+    transition: 0.5s;
+    background: var(--hover);
 }
 
 #resultText {
     margin-top: 3vh;
     font-size: 4vh;
     display: none;
+    color: var(--contrast);
+}
+
+#switchTheme {
+    position: absolute;
+    top: 1.5vh;
+    right: 1vw;
+    width: 4vw;
+    height: 2vw;
+    border-radius: 2vh;
+    cursor: pointer;
+    background: var(--component);
+    border: solid 1px var(--contrast);
+    box-sizing: content-box;
+}
+
+#switchTheme div {
+    position: absolute;
+    left: -1px;
+    top: 0;
+    background: var(--background);
+    width: 2vw;
+    height: 2vw;
+    border-radius: 2vh;
+    transition: 0.3s left;
+    border: 1px solid var(--contrast);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#switchTheme div i {
+    color: var(--contrast);
+    font-size: 2vh;
+}
+
+#switchTheme.right div {
+    left: calc(2vw + 1px);
 }
