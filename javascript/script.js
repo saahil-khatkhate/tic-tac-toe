@@ -35,25 +35,27 @@ const restart = () => {
 };
 
 const computerTurn = () => {
-    let move = minimax(gameBoard, 0, true);
-    gameBoard.insert(move.x, move.y, 'o', true);
-    gameBoard.drawTokens();
-    if (gameBoard.checkWin('o', true)) {
-        result = 'Computer Won!!!';
-        resultText.innerText = result;
-        resultText.style.display = 'block';
-        restartButton.style.display = 'block';
-        turnIndicator.style.display = 'none';
-    } else if (gameBoard.checkTie()) {
-        result = 'Tie!!!';
-        resultText.innerText = result;
-        resultText.style.display = 'block';
-        restartButton.style.display = 'block';
-        turnIndicator.style.display = 'none';
-    } else {
-        currentPlayer = 0;
-        turnIndicator.innerText = 'Your turn';
-    }
+    setTimeout(() => {
+        let move = minimax(gameBoard, 0, true);
+        gameBoard.insert(move.x, move.y, 'o', true);
+        gameBoard.drawTokens();
+        if (gameBoard.checkWin('o', true)) {
+            result = 'Computer Won!!!';
+            resultText.innerText = result;
+            resultText.style.display = 'block';
+            restartButton.style.display = 'block';
+            turnIndicator.style.display = 'none';
+        } else if (gameBoard.checkTie()) {
+            result = 'Tie!!!';
+            resultText.innerText = result;
+            resultText.style.display = 'block';
+            restartButton.style.display = 'block';
+            turnIndicator.style.display = 'none';
+        } else {
+            currentPlayer = 0;
+            turnIndicator.innerText = 'Your turn';
+        }
+    }, 500);
 };
 
 gameCanvas.addEventListener('click', (event) => {
